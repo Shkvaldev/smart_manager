@@ -18,7 +18,7 @@ services:
     volumes:
       - ./mongodb_data:/data/db
     command: --quiet
-  admin:
+  api:
     build:
       dockerfile: api.dockerfile
     env_file:

@@ -2,6 +2,7 @@ from quart import Blueprint, request
 from loguru import logger
 
 from mongodb.database import mongo_init
+from mongodb.models import User
 from mongodb.services import MongoBaseService
 
 router = Blueprint(
@@ -14,7 +15,20 @@ router = Blueprint(
 async def post_route():
     try:
         await mongo_init()
-        return {"status": "ok"}, 200
+        
+        data = await request.json
+        # Searching for user
+        try:
+            user = await MongoBaseService.find(User, {"member_id": data["member_id"]})
+        except Exception:
+            # Create new user if not found
+            user = await MongoBaseService.create(
+                User,
+                member_id=data["member_id"],
+                name=data["name"]
+            )
+
+        return {"status": "ok", "user": user.name}, 200
     except Exception as e:
         logger.error(f"Failed to handle new message: {e}")
-        return {"error": "Failed to handle new message: {e}"}, 500
+        return {"error": f"Failed to handle new message: {e}"}, 500
