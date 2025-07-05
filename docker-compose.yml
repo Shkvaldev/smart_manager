@@ -1,0 +1,32 @@
+services:
+  qdrant:
+    image: qdrant/qdrant
+    restart: unless-stopped
+    ports:
+      - 6333:6333
+      - 6334:6334
+    volumes:
+      - ./qdrant_storage:/qdrant/storage
+  mongodb:
+    image: mongo
+    restart: unless-stopped
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGODB_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGODB_PASSWORD}
+    ports:
+      - 27017:27017
+    volumes:
+      - ./mongodb_data:/data/db
+    command: --quiet
+  admin:
+    build:
+      dockerfile: api.dockerfile
+    env_file:
+      - .env
+    ports:
+      - 5000:5000
+    volumes:
+      - ./assets:/app/assets
+      - ./static:/app/static
+    depends_on:
+      - mongodb

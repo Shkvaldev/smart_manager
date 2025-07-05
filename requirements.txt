@@ -1,0 +1,8 @@
+quart
+quart-cors
+gigachat
+loguru
+qdrant-client
+beanie
+pydantic
+pydantic_settings
