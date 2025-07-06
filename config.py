@@ -5,6 +5,9 @@ class Settings(BaseSettings):
     mongodb_user: str
     mongodb_password: str
 
+    qdrant_uri: str
+    embeddings_size: int
+
     gigachat_key: str
 
     model_config = SettingsConfigDict(env_file='.env')

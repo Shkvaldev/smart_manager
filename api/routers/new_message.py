@@ -27,6 +27,8 @@ async def post_route():
                 member_id=data["member_id"],
                 name=data["name"]
             )
+        
+        # Deal with message
 
         return {"status": "ok", "user": user.name}, 200
     except Exception as e:
