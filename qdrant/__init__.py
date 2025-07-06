@@ -26,7 +26,7 @@ class Qdrant:
     async def add(self, embedding: List[float], payload: str) -> None:
         """Adding new info to Qdrant"""
         try:
-            await client.upsert(
+            await self.client.upsert(
                 collection_name="faq",
                 wait=True,
                 points=[
@@ -44,12 +44,11 @@ class Qdrant:
             logger.error(f"Failed to search in Qdrant: provided search embedding's length is wrong (need: {settings.embeddings_size}, in fact: {len(query)})")
             raise ValueError(f"Failed to search in Qdrant: provided search embedding's length is wrong (need: {settings.embeddings_size}, in fact: {len(query)})")
         try:
-            search_result = client.search(
+            return await self.client.search(
                 collection_name="faq",
                 query_vector=query,
                 limit=1
             )
-            print(search_result)
         except Exception as e:
             logger.error(f"Failed to add new embedding to Qdrant: {e}")
             raise ValueError(e)
